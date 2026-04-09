@@ -72,7 +72,7 @@ const piArgs = ["bunx", "pi", "--mode", "json", "--model", "gemini-2.5-flash", "
     piArgs.push("--session", sessionPath);
   }
 
-  const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "ignore" });
+  const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "inherit" });
   const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { stdin: pi.stdout, stdout: "inherit" });
   await tee.exited;
   // --- 调试：在报错前打印 AI 的原始回复 ---
