@@ -72,11 +72,20 @@ const piArgs = ["bunx", "pi", "--mode", "json", "--model", "gemini-2.5-flash", "
     piArgs.push("--session", sessionPath);
   }
 
-  const pi = Bun.spawn(piArgs, { 
+  // --- 修改后的核心启动逻辑 ---
+const pi = Bun.spawn(piArgs, { 
   stdout: "pipe", 
-  stderr: "inherit", 
-  env: process.env // 👈 就在这里，记得前面有个逗号
+  stderr: "inherit",
+  // 显式继承所有环境变量，确保 GOOGLE_API_KEY 成功传递
+  env: process.env 
 });
+
+const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { 
+  stdin: pi.stdout, 
+  stdout: "inherit" 
+});
+
+await tee.exited;
   const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { stdin: pi.stdout, stdout: "inherit" });
   await tee.exited;
   // --- 调试：在报错前打印 AI 的原始回复 ---
