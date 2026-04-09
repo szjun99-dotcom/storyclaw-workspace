@@ -1,0 +1,23 @@
+name: StoryClaw Agent
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  run-storyclaw:
+    if: ${{ !github.event.issue.pull_request && github.event.comment.user.login != 'github-actions[bot]' }}
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v1
+      - name: Install
+        run: bun install
+      - name: Run Agent
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun main.ts
