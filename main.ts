@@ -75,7 +75,10 @@ const piArgs = ["bunx", "pi", "--mode", "json", "--model", "gemini-2.5-flash", "
   const pi = Bun.spawn(piArgs, { stdout: "pipe", stderr: "ignore" });
   const tee = Bun.spawn(["tee", "/tmp/agent-raw.jsonl"], { stdin: pi.stdout, stdout: "inherit" });
   await tee.exited;
-
+  // --- 调试：在报错前打印 AI 的原始回复 ---
+console.log("--- DEBUG: 正在读取原始回复数据 ---");
+await Bun.spawn(["cat", "/tmp/agent-raw.jsonl"], { stdout: "inherit" }).exited;
+console.log("--- DEBUG: 读取完毕 ---");
   // Extract text from the agent's final message
   const tac = Bun.spawn(["tac", "/tmp/agent-raw.jsonl"], { stdout: "pipe" });
   const jq = Bun.spawn(
