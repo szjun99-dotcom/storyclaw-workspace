@@ -17,15 +17,15 @@ jobs:
       - name: Install
         run: bun install
       - name: Run Agent
-       
-      env:
-        GOOGLE_API_KEY: ${{ secrets.API_KEY }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        if [ -z "$GOOGLE_API_KEY" ]; then
+  
+        env:
+         GOOGLE_API_KEY: ${{ secrets.API_KEY }}
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+        run: |
+         if [ -z "$GOOGLE_API_KEY" ]; then
           echo "❌ 探测结果：钥匙是空的！燃料没送过来。"
           exit 1
-        else
+         else
           echo "✅ 探测结果：钥匙已就位！准备启动机器人。"
-        fi
-        bun main.ts
+         fi
+         bun main.ts
