@@ -19,7 +19,7 @@ jobs:
       - name: Run Agent
        
       env:
-        GOOGLE_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        GOOGLE_API_KEY: ${{ secrets.API_KEY }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         if [ -z "$GOOGLE_API_KEY" ]; then
